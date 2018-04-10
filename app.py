@@ -63,6 +63,9 @@ if __name__ == '__main__':
             for l in f:
                 id, color = l.strip().split('|')
                 colors[id] = color
+    except:
+        pass
+    
 
     #set up logging
     output = open("storage.txt", "a+")
