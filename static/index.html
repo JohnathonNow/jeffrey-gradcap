@@ -40,9 +40,8 @@ div.brush {
 </head>
 <body>
     <ul></ul>
-    <div class="brush"></div>
     <br />
-    <input type="color" value="#ff0000" style="width:125px">
+    <input id="brush" type="color" value="#ff0000" style="width:125px">
     <script>
         var v = 0;
         function read() {
@@ -75,14 +74,10 @@ $(function() {
         n.attr('id', 'cell_'+i);
         $palette.append(n);
     }
-    //$('.brush').css('background-color') = '#ff0000';
 
-    $('input[type="color"]').change(function() {
-        $('.brush').css('background-color', this.value);
-    });
     $('li').on('click', function(e) {
         console.log($(this).attr('id'));
-        var color = $('.brush').css('background-color');
+        var color = $('#brush').val();
         $(this).css('background-color', color);
         $.get( "write", { id:$(this).attr('id'), color:color, }, function( data ) {
             console.log(data); 
