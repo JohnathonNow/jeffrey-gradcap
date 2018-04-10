@@ -10,8 +10,8 @@ from datetime import datetime
 
 TIMEOUT = 30 #timeout for requests, for long polling
 
-#initialize grid to all white
-colors={'cell_{}'.format(x): 'rgb(255,255,255)' for x in range(0, 32*32)}
+#initialize grid to all black
+colors={'cell_{}'.format(x): 'rgb(0,0,0)' for x in range(0, 32*32)}
 #keep track of a "version number" for detecting changes
 colors['v'] = 1
 #log changes to output file
