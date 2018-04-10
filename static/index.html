@@ -4,143 +4,18 @@
         <meta charset="utf-8"/>
         <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
         <script src="jquery.js"></script>
-        <style>
-ul {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    border-style: solid;
-    border-width: 5px;
-    margin: auto;
-    padding: 0;
-    transition: width 250ms ease-in-out, height 250ms ease-in-out;
-}
-
-.btn {
-    border-radius: 50%;
-    border-color: #e7e7e7;
-    background: #ffffff;
-    color: black;
-    display:inline-block;
-    height: 32px;
-    width: 32px;
-    line-height: 32px;
-    text-align: center;
-    vertical-align: middle;
-    padding: 5px;
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+/Edge */
-    user-select: none; /* Standard */
-}
-
-.btn:hover {
-    background: #e7e7e7;
-}
-
-body {
-    margin: 0 0;
-    text-align: center;
-    padding: 0;
-    background-color: #000000;
-}
-
-li {
-    box-sizing: border-box;
-    cursor: pointer;
-    display: block;
-    width: 3.125%;
-    height: 3.125%;
-    float: left;
-    padding: 0;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #222222;
-    margin: 0;
-}
-
-
-#view {
-    height: 80vw;
-    width: 80vw;
-    max-width: 80vh;
-    max-height: 80vh;
-    overflow: auto;
-    display: block; 
-    margin:0 auto;
-}
-        </style>
+        <link href="style.css" rel="stylesheet">
     </head>
     <body>
         <div id="view">
-        <ul id='zoomable'></ul>
+            <ul id='zoomable'></ul>
         </div>
         <br />
         <div id="zoomout" class="btn">-</div>
         <div id="zoomin" class="btn">+</div>
         <input id="brush" type="color" value="#ff0000" style="width:125px">
         <br />
-        Click on any square to change its color. You can also click on the color chooser to choose a color.
-        <script>
-            var v = 0;
-            var zoom = 1024;
-function read() {
-    $.get( "read", {'v': v}, function( data ) {
-        var p = JSON.parse(data);
-        if (v < p['v']) {
-            for (var key in p) {
-                if (p.hasOwnProperty(key)) {
-                    if (key !== 'v') {
-                        $("#"+key).css('background-color', p[key]);
-                    }
-                }
-            }
-            v = p['v'];
-        }
-        setTimeout(reader, 100);
-    })
-        .fail(function() {
-            setTimeout(reader, 100);
-        });
-}
-function reader() {
-    read();
-}
-
-$(function() {
-
-    var $palette = $('ul');
-    for (var i = 0; i < 32*32; i++) {
-        var n = $('<li />').css('background-color', '#000000');
-        n.attr('id', 'cell_'+i);
-        $palette.append(n);
-    }
-
-    $('li').on('click', function(e) {
-        console.log($(this).attr('id'));
-        var color = $('#brush').val();
-        $(this).css('background-color', color);
-        $.get( "write", { id:$(this).attr('id'), color:color, }, function( data ) {
-            console.log(data); 
-        });
-        return true;
-    });
-
-    zoom = $('#zoomable').outerWidth(true);
-
-    $('#zoomout').on('click', function(e) {
-        zoom /= 1.2;
-        $('#zoomable').css('width', zoom+"px");
-        $('#zoomable').css('height', zoom+"px");
-    });
-
-    $('#zoomin').on('click', function(e) {
-        zoom *= 1.2;
-        $('#zoomable').css('width', zoom+"px");
-        $('#zoomable').css('height', zoom+"px");
-    });
-
-    reader();
-});
-        </script>
+        <font color="white">Click on any square to change its color. You can also click on the color chooser to choose a color.</font>
+        <script src="logic.js"></script>
     </body>
+</html>

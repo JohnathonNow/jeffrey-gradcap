@@ -9,11 +9,13 @@ import time
 from datetime import datetime
 
 TIMEOUT = 30 #timeout for requests, for long polling
+SIZE = 32*32 #number of pixels
 
+data = {}
 #initialize grid to all black
-colors={'cell_{}'.format(x): 'rgb(0,0,0)' for x in range(0, 32*32)}
+data['colors'] = ['#000000' for x in range(0, SIZE)]
 #keep track of a "version number" for detecting changes
-colors['v'] = 1
+data['v'] = 1
 #log changes to output file
 output = None
 #a lock for thread safety
@@ -23,36 +25,52 @@ class Page(object):
     @cherrypy.expose
     def read(self, v):
         ct = datetime.now() #get the start time, for long polling
+        response = {'status': 'success'}
         try:
             lock.acquire()
-            while int(v) >= int(colors['v']): #wait for new data
+            while int(v) >= int(data['v']): #wait for new data
                 lock.release()
                 time.sleep(0.1) #let someone else try to do something
                 lock.acquire()
                 lt = datetime.now()
                 #if we wait too long, let our client just start a new request
                 if int((lt - ct).total_seconds()) >= TIMEOUT:
+                    response['status'] = 'failure'
+                    response['reason'] = 'timeout'
                     break
-            return json.dumps(colors) #send over the data
+            response['payload'] = data
+            return json.dumps(response) #send over the data
         except Exception as E:
             #file an error report
-            return json.dumps({'Error': str(E)})
+            response['status'] = 'failure'
+            response['reason'] = str(E)
+            return json.dumps(response)
         finally: #whenever we leave, no matter what we must release the lock
             lock.release()
 
     @cherrypy.expose
     def write(self, id, color):
+        response = {'status': 'failure'}
         try:
             lock.acquire() #start critical section - we're modifying colors
-            colors[id] = urllib.parse.unquote(color)
+            id = int(id)
+            if id < 0 or id >= SIZE: #ensure id is valid
+                raise ValueError('id must be between 0 and {}'.format(SIZE))
+
+            #update color data
+            data['colors'][id] = urllib.parse.unquote(color)
+
             if output: #if we are logging, then log
                 output.write('{}|{}\n'.format(id, color))
                 output.flush();
+
             #increment our version, to let people know there is new data
-            colors['v'] += 1
-            return 'success'
+            data['v'] += 1
+            response['status'] = 'success'
+            return json.dumps(response)
         except Exception as E:
-            return str(E)
+            response['reason'] = str(E)
+            return json.dumps(response)
         finally:
             lock.release() #whenever we leave we release the lock!
 
@@ -62,10 +80,10 @@ if __name__ == '__main__':
         with open("storage.txt") as f:
             for l in f:
                 id, color = l.strip().split('|')
-                colors[id] = color
+                data['colors'][id] = color
+                data['v'] += 1
     except:
         pass
-    
 
     #set up logging
     output = open("storage.txt", "a+")
