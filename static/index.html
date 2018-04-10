@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-    <script src="jquery.js"></script>
-    <style>
+    <head>
+        <meta charset="utf-8"/>
+        <script src="jquery.js"></script>
+        <style>
 ul {
     width: 100%;
     border-style: solid;
@@ -36,35 +36,37 @@ div.brush {
     width: 125px;
     background-color: #ff0000;
 }
-    </style>
-</head>
-<body>
-    <ul></ul>
-    <br />
-    <input id="brush" type="color" value="#ff0000" style="width:125px">
-    <script>
-        var v = 0;
-        function read() {
-            $.get( "read", {'v': v}, function( data ) {
-                console.log(data); 
-                var p = JSON.parse(data);
-                for (var key in p) {
-                    if (p.hasOwnProperty(key)) {
-                        if (key !== 'v') {
-                            $("#"+key).css('background-color', p[key]);
-                        }
+        </style>
+    </head>
+    <body>
+        <ul></ul>
+        <br />
+        <input id="brush" type="color" value="#ff0000" style="width:125px">
+        <script>
+            var v = 0;
+function read() {
+    $.get( "read", {'v': v}, function( data ) {
+        console.log(data); 
+        var p = JSON.parse(data);
+        if (v < p['v']) {
+            for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                    if (key !== 'v') {
+                        $("#"+key).css('background-color', p[key]);
                     }
                 }
-                v = p['v'];
-                    setTimeout(reader, 100);
-            })
-                .fail(function() {
-                    setTimeout(reader, 100);
-                });
+            }
+            v = p['v'];
         }
-        function reader() {
-            read();
-        }
+        setTimeout(reader, 100);
+    })
+        .fail(function() {
+            setTimeout(reader, 100);
+        });
+}
+function reader() {
+    read();
+}
 
 $(function() {
 
@@ -87,5 +89,5 @@ $(function() {
 
     reader();
 });
-    </script>
-</body>
+        </script>
+    </body>
