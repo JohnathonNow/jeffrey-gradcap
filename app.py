@@ -10,7 +10,7 @@ from datetime import datetime
 
 TIMEOUT = 30
 
-colors={'cell_{}'.format(x): 'rgb(0,0,0)' for x in range(0, 32*32)}
+colors={'cell_{}'.format(x): 'rgb(255,255,255)' for x in range(0, 32*32)}
 colors['v'] = 1
 
 output = None
