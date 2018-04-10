@@ -2,14 +2,39 @@
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
         <script src="jquery.js"></script>
         <style>
 ul {
-    width: 100%;
+    width: 1024px;
+    height: 1024px;
     border-style: solid;
     border-width: 5px;
-    margin: 0 0;
+    margin: auto;
     padding: 0;
+    transition: width 250ms ease-in-out, height 250ms ease-in-out;
+}
+
+.btn {
+    border-radius: 50%;
+    border-color: #e7e7e7;
+    background: #ffffff;
+    color: black;
+    display:inline-block;
+    height: 32px;
+    width: 32px;
+    line-height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.btn:hover {
+    background: #e7e7e7;
 }
 
 body {
@@ -23,7 +48,7 @@ li {
     cursor: pointer;
     display: block;
     width: 3.125%;
-    height: 32px;
+    height: 3.125%;
     float: left;
     padding: 0;
     border-style: solid;
@@ -32,25 +57,33 @@ li {
     margin: -3px -3px -3px -3px;
 }
 
-div.brush {
-    clear: both;
-    height: 25px;
-    width: 125px;
-    background-color: #ff0000;
+
+#view {
+    height: 80vw;
+    width: 80vw;
+    max-width: 80vh;
+    max-height: 80vh;
+    overflow: scroll;
+    display: block; 
+    margin:0 auto;
 }
         </style>
     </head>
     <body>
-        <ul></ul>
+        <div id="view">
+        <ul id='zoomable'></ul>
+        </div>
         <br />
+        <div id="zoomout" class="btn">-</div>
+        <div id="zoomin" class="btn">+</div>
         <input id="brush" type="color" value="#ff0000" style="width:125px">
         <br />
         Click on any square to change its color. You can also click on the color chooser to choose a color.
         <script>
             var v = 0;
+            var zoom = 1024;
 function read() {
     $.get( "read", {'v': v}, function( data ) {
-        console.log(data); 
         var p = JSON.parse(data);
         if (v < p['v']) {
             for (var key in p) {
@@ -89,6 +122,18 @@ $(function() {
             console.log(data); 
         });
         return true;
+    });
+
+    $('#zoomout').on('click', function(e) {
+        zoom /= 1.2;
+        $('#zoomable').css('width', zoom+"px");
+        $('#zoomable').css('height', zoom+"px");
+    });
+
+    $('#zoomin').on('click', function(e) {
+        zoom *= 1.2;
+        $('#zoomable').css('width', zoom+"px");
+        $('#zoomable').css('height', zoom+"px");
     });
 
     reader();
