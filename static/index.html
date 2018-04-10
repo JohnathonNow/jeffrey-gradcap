@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+    <script src="jquery.js"></script>
+    <style>
+ul {
+    width: 100%;
+    border-style: solid;
+    border-width: 5px;
+    margin: 0 0;
+    padding: 0;
+}
+
+body {
+    margin: 0 0;
+    text-align: center;
+    padding: 0;
+}
+
+li {
+    cursor: pointer;
+    display: block;
+    width: 3.125%;
+    height: 32px;
+    float: left;
+    padding: 0;
+    border-style: solid;
+    border-width: 3px;
+    margin: -3px -3px -3px -3px;
+}
+
+div.brush {
+    clear: both;
+    height: 25px;
+    width: 125px;
+    background-color: #ff0000;
+}
+    </style>
+</head>
+<body>
+    <ul></ul>
+    <div class="brush"></div>
+    <br />
+    <input type="color" value="#ff0000" style="width:125px">
+    <script>
+        var v = 0;
+        function read() {
+            $.get( "read", {'v': v}, function( data ) {
+                console.log(data); 
+                var p = JSON.parse(data);
+                for (var key in p) {
+                    if (p.hasOwnProperty(key)) {
+                        if (key !== 'v') {
+                            $("#"+key).css('background-color', p[key]);
+                        }
+                    }
+                }
+                v = p['v'];
+                    setTimeout(reader, 1000);
+            })
+                .fail(function() {
+                    setTimeout(reader, 1000);
+                });
+        }
+        function reader() {
+            read();
+        }
+
+$(function() {
+
+    var $palette = $('ul');
+    for (var i = 0; i < 32*32; i++) {
+        var n = $('<li />').css('background-color', '#FFFFFF');
+        n.attr('id', 'cell_'+i);
+        $palette.append(n);
+    }
+    //$('.brush').css('background-color') = '#ff0000';
+
+    $('input[type="color"]').change(function() {
+        $('.brush').css('background-color', this.value);
+    });
+    $('li').on('click', function(e) {
+        console.log($(this).attr('id'));
+        var color = $('.brush').css('background-color');
+        $(this).css('background-color', color);
+        $.get( "write", { id:$(this).attr('id'), color:color, }, function( data ) {
+            console.log(data); 
+        });
+        return true;
+    });
+
+    reader();
+});
+    </script>
+</body>
