@@ -80,7 +80,7 @@ if __name__ == '__main__':
         with open("storage.txt") as f:
             for l in f:
                 id, color = l.strip().split('|')
-                data['colors'][id] = color
+                data['colors'][int(id)] = color
                 data['v'] += 1
     except:
         pass
