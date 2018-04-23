@@ -24,12 +24,12 @@ output = None
 #a lock for thread safety
 lock = threading.Lock()
 
-def usr1():
+def usr1(a,b):
     lock.acquire()
     data['mode'] = 0
     lock.release()
 
-def usr2():
+def usr2(a,b):
     lock.acquire()
     if data['mode'] == 1:
         data['mode'] = 2
