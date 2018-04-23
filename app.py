@@ -26,7 +26,10 @@ lock = threading.Lock()
 
 def usr1(a,b):
     lock.acquire()
-    data['mode'] = 0
+    if data['mode'] == 0:
+        data['mode'] = 1
+    else:
+        data['mode'] = 0
     data['v'] += 1
     lock.release()
 
