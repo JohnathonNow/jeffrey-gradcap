@@ -81,7 +81,9 @@ if __name__ == '__main__':
         try:
             v = read(v)
             time.sleep(1)
-        except:
+        except KeyboardInterrupt:
             print("\b\bOK BYE")
             break
+        except:
+            time.sleep(10)
     matrix.Clear()
