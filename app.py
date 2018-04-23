@@ -42,7 +42,7 @@ def usr2(a,b):
     data['v'] += 1
     lock.release()
 
-signal.signal(signal.SIGUSR1, usr1)
+signal.signal(signal.SIGQUIT, usr1)
 signal.signal(signal.SIGUSR2, usr2)
 
 class Page(object):
