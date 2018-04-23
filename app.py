@@ -44,7 +44,7 @@ class Page(object):
     @cherrypy.expose
     def read(self, v):
         ct = datetime.now() #get the start time, for long polling
-        response = {'status': 'success'}
+        response = {'status': 'success', 'v': '9999999'}
         try:
             lock.acquire()
             while int(v) >= int(data['v']): #wait for new data
