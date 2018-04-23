@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import requests
 import json
 from PIL import Image
@@ -67,6 +68,8 @@ def read(v):
             matrix.SetImage(ndlogo)
             #update our version number
             v = p['payload']['v']
+        elif p['payload']['mode'] == 0:
+            os.system("poweroff")
         else:
             #refresh the matrix
             matrix.SetImage(image)
