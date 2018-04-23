@@ -59,10 +59,10 @@ def read(v):
                     for i in range(0, 1024):
                         pixels[31-(i%32), 31-int(i/32)] = tuple([int(x*rescale) for x in pixels[31-(i%32), 31-int(i/32)]])
 
-                #update our version number
-                v = p['payload']['v']
-                #refresh the matrix
-                matrix.SetImage(image)
+            #update our version number
+            v = p['payload']['v']
+            #refresh the matrix
+            matrix.SetImage(image)
         elif p['payload']['mode'] == 2:
             matrix.SetImage(ndlogo)
             #update our version number
