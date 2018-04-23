@@ -7,6 +7,7 @@ import json
 import threading
 import time
 from datetime import datetime
+import signal
 
 TIMEOUT = 30 #timeout for requests, for long polling
 SIZE = 32*32 #number of pixels
@@ -16,10 +17,28 @@ data = {}
 data['colors'] = ['#000000' for x in range(0, SIZE)]
 #keep track of a "version number" for detecting changes
 data['v'] = 1
+#modes, 0 = power off pi, 1 = show ND logo, 2 = game of life
+data['mode'] = 1
 #log changes to output file
 output = None
 #a lock for thread safety
 lock = threading.Lock()
+
+def usr1():
+    lock.acquire()
+    data['mode'] = 0
+    lock.release()
+
+def usr2():
+    lock.acquire()
+    if data['mode'] == 1:
+        data['mode'] = 2
+    elif data['mode'] == 2:
+        data['mode'] = 1
+    lock.release()
+
+signal.signal(signal.SIGUSR1, usr1)
+signal.signal(signal.SIGUSR2, usr2)
 
 class Page(object):
     @cherrypy.expose

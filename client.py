@@ -20,6 +20,8 @@ matrix = RGBMatrix(options = options)
 image = Image.new("RGB", (32, 32))
 pixels = image.load()
 
+ndlogo = Image.open("ndlogo.png").convert("RGB")
+
 #scale for converting RGB channel totals to amperes
 scale = 4000.0/(255*32*32*3)
 
@@ -37,28 +39,32 @@ def read(v):
     p = json.loads(r.text)
     #if our read was successful, let's do some stuff
     if p['status'] == 'success':
-        #first make sure we got a new version
-        if v < p['payload']['v']:
-            #if so, we should change the matrix image as well as calculate the total current draw
-            total = 0
-            for i in range(0, 1024):
-                #convert the color to a tuple
-                c = hex2rgb(p['payload']['colors'][i])
-                #set the pixel
-                pixels[31-(i%32), 31-int(i/32)] = c
-                #add to the total current
-                total += sum(c)
-
-            #if we exceeding the max current we are comfortable with
-            if total*scale > MAX_POWER:
-                #rescale the entire image
-                rescale = MAX_POWER/(total*scale)
+        if p['mode'] == 1:
+            #first make sure we got a new version
+            if v < p['payload']['v']:
+                #if so, we should change the matrix image as well as calculate the total current draw
+                total = 0
                 for i in range(0, 1024):
-                    pixels[31-(i%32), 31-int(i/32)] = tuple([int(x*rescale) for x in pixels[31-(i%32), 31-int(i/32)]])
-        #update our version number
-        v = p['payload']['v'];
-        #refresh the matrix
-        matrix.SetImage(image)
+                    #convert the color to a tuple
+                    c = hex2rgb(p['payload']['colors'][i])
+                    #set the pixel
+                    pixels[31-(i%32), 31-int(i/32)] = c
+                    #add to the total current
+                    total += sum(c)
+
+                #if we exceeding the max current we are comfortable with
+                if total*scale > MAX_POWER:
+                    #rescale the entire image
+                    rescale = MAX_POWER/(total*scale)
+                    for i in range(0, 1024):
+                        pixels[31-(i%32), 31-int(i/32)] = tuple([int(x*rescale) for x in pixels[31-(i%32), 31-int(i/32)]])
+
+                #update our version number
+                v = p['payload']['v'];
+                #refresh the matrix
+                matrix.SetImage(image)
+            elif p['mode'] == 2:
+                matrix.SetImage(ndlogo)
     return v
 
 if __name__ == '__main__':
