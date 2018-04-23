@@ -65,6 +65,8 @@ def read(v):
                 matrix.SetImage(image)
         elif p['payload']['mode'] == 2:
             matrix.SetImage(ndlogo)
+            #update our version number
+            v = p['payload']['v']
         else:
             #refresh the matrix
             matrix.SetImage(image)

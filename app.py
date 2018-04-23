@@ -27,6 +27,7 @@ lock = threading.Lock()
 def usr1(a,b):
     lock.acquire()
     data['mode'] = 0
+    data['v'] += 1
     lock.release()
 
 def usr2(a,b):
@@ -35,6 +36,7 @@ def usr2(a,b):
         data['mode'] = 2
     elif data['mode'] == 2:
         data['mode'] = 1
+    data['v'] += 1
     lock.release()
 
 signal.signal(signal.SIGUSR1, usr1)
