@@ -39,7 +39,7 @@ def read(v):
     p = json.loads(r.text)
     #if our read was successful, let's do some stuff
     if p['status'] == 'success':
-        if p['mode'] == 1:
+        if p['payload']['mode'] == 1:
             #first make sure we got a new version
             if v < p['payload']['v']:
                 #if so, we should change the matrix image as well as calculate the total current draw
@@ -63,7 +63,7 @@ def read(v):
                 v = p['payload']['v'];
                 #refresh the matrix
                 matrix.SetImage(image)
-            elif p['mode'] == 2:
+            elif p['payload']['mode'] == 2:
                 matrix.SetImage(ndlogo)
     return v
 
