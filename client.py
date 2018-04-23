@@ -21,7 +21,7 @@ matrix = RGBMatrix(options = options)
 image = Image.new("RGB", (32, 32))
 pixels = image.load()
 
-ndlogo = Image.open("ndlogo.png").convert("RGB")
+ndlogo = Image.open("/home/pi/jeffrey-gradcap/ndlogo.png").convert("RGB")
 
 #scale for converting RGB channel totals to amperes
 scale = 4000.0/(255*32*32*3)
