@@ -1,3 +1,22 @@
+/*
+    This file is the js logic for the web client for the software on my graduation cap, Jeffrey-Gradcap.
+    Copyright (C) 2018 John Westhoff
+
+    This file is part of Jeffrey-Gradcap.
+
+    Jeffrey-Gradcap is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Jeffrey-Gradcap is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Jeffrey-Gradcap.  If not, see <http://www.gnu.org/licenses/>.
+*/
 const cell_prefix = 'cell_';
 const modes = ["off", "showing the above", "showing the ND logo"]
 
