@@ -69,7 +69,7 @@ def read(v):
             #update our version number
             v = p['payload']['v']
         elif p['payload']['mode'] == 0:
-            os.system("shutdown -h now")
+            os.system("sudo poweroff")
         else:
             #refresh the matrix
             matrix.SetImage(image)
