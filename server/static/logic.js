@@ -18,7 +18,7 @@
     along with Jeffrey-Gradcap.  If not, see <http://www.gnu.org/licenses/>.
 */
 const cell_prefix = 'cell_';
-const modes = ["off", "showing the above", "showing the ND logo"]
+const modes = ["off", "showing the above", "showing the ND logo", "showing the game of life"]
 
 var v = 0;
 var zoom = 1024;

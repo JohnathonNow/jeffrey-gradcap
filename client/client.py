@@ -19,6 +19,7 @@
 
 import os
 import requests
+import gol
 import json
 from PIL import Image
 import time
@@ -77,19 +78,27 @@ def read(v):
                     for i in range(0, 1024):
                         pixels[31-(i%32), 31-int(i/32)] = tuple([int(x*rescale) for x in pixels[31-(i%32), 31-int(i/32)]])
 
-            #update our version number
-            v = p['payload']['v']
             #refresh the matrix
             matrix.SetImage(image)
         elif p['payload']['mode'] == 2:
             matrix.SetImage(ndlogo)
-            #update our version number
-            v = p['payload']['v']
+        elif p['payload']['mode'] == 3:
+            e = gol.Ecosystem(32, 32) 
+            e.seed()
+            for i in range(0, 1024):
+                e.tick()
+                for cell in e:
+                    pixels[cell[0], cell[1]] = e.color(cell)
+                #refresh the matrix
+                matrix.SetImage(image)
+                time.sleep(1)
         elif p['payload']['mode'] == 0:
             os.system("sudo poweroff")
         else:
             #refresh the matrix
             matrix.SetImage(image)
+        #update our version number
+        v = p['payload']['v']
     return v
 
 if __name__ == '__main__':

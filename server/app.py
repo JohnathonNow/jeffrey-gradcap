@@ -35,7 +35,7 @@ data = {}
 data['colors'] = ['#000000' for x in range(0, SIZE)]
 #keep track of a "version number" for detecting changes
 data['v'] = 1
-#modes, 0 = power off pi, 1 = show ND logo, 2 = game of life
+#modes, 0 = power off pi, 1 = r/place, 2 = show ND logo, 3 = game of life
 data['mode'] = 1
 #keep track of user count
 data['users'] = 0
@@ -55,9 +55,8 @@ def usr1(a,b):
 
 def usr2(a,b):
     lock.acquire()
-    if data['mode'] == 1:
-        data['mode'] = 2
-    elif data['mode'] == 2:
+    data['mode'] += 1
+    if data['mode'] > 3:
         data['mode'] = 1
     data['v'] += 1
     lock.release()
