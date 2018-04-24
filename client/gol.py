@@ -26,38 +26,45 @@ class Ecosystem:
         self.board = [0 for i in range(0, w*h)]
 
     def __getitem__(self, i):
-        if not isinstance(i, tuple) or not len(i) == 2:
-            raise IndexError('index must be a tuple of length 2')
-
         x = i[0] % self.w
         y = i[1] % self.h
         return self.board[x + self.h*y]
 
-    def __setitem__(self, i, val):
-        if not isinstance(i, tuple) or not len(i) == 2:
-            raise IndexError('index must be a tuple of length 2')
-
+    def live(self, i):
         x = i[0] % self.w
         y = i[1] % self.h
-        self.board[x + self.h*y] = val
+        return 1 if self.board[x + self.h*y] else 0
+
+    def __setitem__(self, i, val):
+        x = i[0] % self.w
+        y = i[1] % self.h
+        self.board[x + self.w*y] = val
 
     def __iter__(self):
         return EcoIterator(self)
 
     def tick(self):
-        oldboard = self.board[:]
-        neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1, 1), (1,-1), (-1,1), (-1,-1)]
+        newboard = self.board[:]
         for x in range(0, self.w):
             for y in range(0, self.h):
-                n = sum([1 if self[(t[0]+x,t[1]+y)] else 0 for t in neighbors])
-                if self[(x,y)] and n in [0]:
-                    self[(x,y)] = 0
-                elif self[(x,y)] and n in [2, 3]:
-                    self[(x,y)] += 1 
-                elif self[(x,y)] and n > 3:
-                    self[(x,y)] = 0
-                elif not self[(x,y)] and n in [3]:
-                    self[(x,y)] = 1 
+                n = self.live((x+1,y))   \
+                  + self.live((x-1,y))   \
+                  + self.live((x,y+1))   \
+                  + self.live((x,y-1))   \
+                  + self.live((x+1,y+1)) \
+                  + self.live((x+1,y-1)) \
+                  + self.live((x-1,y-1)) \
+                  + self.live((x-1,y+1))  
+                if self[(x,y)]:
+                    if n < 2:
+                        newboard[x+y*self.w] = 0
+                    elif n >= 2 and n <= 3:
+                        newboard[x+y*self.w] += 1
+                    elif n > 3:
+                        newboard[x+y*self.w] = 0
+                elif n == 3:
+                    newboard[x+y*self.w] = 1
+        self.board = newboard
 
     def color(self, x, y):
         a = self[(x,y)]

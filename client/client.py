@@ -85,13 +85,12 @@ def read(v):
         elif p['payload']['mode'] == 3:
             e = gol.Ecosystem(32, 32) 
             e.seed()
-            for i in range(0, 1024):
+            for i in range(0, 100):
                 e.tick()
                 for cell in e:
-                    pixels[cell[0], cell[1]] = e.color(cell)
+                    pixels[cell[0], cell[1]] = e.color(*cell)
                 #refresh the matrix
                 matrix.SetImage(image)
-                time.sleep(1)
         elif p['payload']['mode'] == 0:
             os.system("sudo poweroff")
         else:
@@ -110,6 +109,7 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print("\b\bOK BYE")
             break
-        except:
+        except Exception as E:
+            print(E)
             time.sleep(10)
     matrix.Clear()
