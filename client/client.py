@@ -91,6 +91,7 @@ def read(v):
                     pixels[cell[0], cell[1]] = e.color(*cell)
                 #refresh the matrix
                 matrix.SetImage(image)
+            p['payload']['v'] = 0
         elif p['payload']['mode'] == 0:
             os.system("sudo poweroff")
         else:
