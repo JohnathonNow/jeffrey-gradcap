@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #    This file is a game of life implementation for the client for the software on my graduation cap, Jeffrey-Gradcap.
 #    Copyright (C) 2018 John Westhoff
 
@@ -48,7 +48,7 @@ class Ecosystem:
         oldboard = self.board[:]
         neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1, 1), (1,-1), (-1,1), (-1,-1)]
         for x in range(0, self.w):
-            for y in range(0, self.y):
+            for y in range(0, self.h):
                 n = sum([1 if self[(t[0]+x,t[1]+y)] else 0 for t in neighbors])
                 if self[(x,y)] and n in [0]:
                     self[(x,y)] = 0
@@ -105,5 +105,7 @@ class EcoIterator:
 
 if __name__ == '__main__':
     e = Ecosystem(32, 32)
+    e.seed()
+    e.tick()
     for i in e:
         print(e.color(*i))
