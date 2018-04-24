@@ -19,6 +19,8 @@ data['colors'] = ['#000000' for x in range(0, SIZE)]
 data['v'] = 1
 #modes, 0 = power off pi, 1 = show ND logo, 2 = game of life
 data['mode'] = 1
+#keep track of user count
+data['users'] = 0
 #log changes to output file
 output = None
 #a lock for thread safety
@@ -52,6 +54,7 @@ class Page(object):
         response = {'status': 'success', 'v': '9999999'}
         try:
             lock.acquire()
+            data['users'] += 1
             while int(v) >= int(data['v']): #wait for new data
                 lock.release()
                 time.sleep(0.1) #let someone else try to do something
@@ -70,6 +73,7 @@ class Page(object):
             response['reason'] = str(E)
             return json.dumps(response)
         finally: #whenever we leave, no matter what we must release the lock
+            data['users'] -= 1
             lock.release()
 
     @cherrypy.expose

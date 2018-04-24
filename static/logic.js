@@ -1,7 +1,9 @@
 const cell_prefix = 'cell_';
+const modes = ["off", "showing the above", "showing the ND logo"]
 
 var v = 0;
 var zoom = 1024;
+
 
 function read() {
     $.get( "read", {'v': v}, function(data) {
@@ -15,6 +17,8 @@ function read() {
                 }
             }
             v = p['payload']['v'];
+            $('#mode').text('The hat is currently '+modes[p['payload']['mode']]+'.');
+            $('#users').text('You are one of '+p['payload']['users']+' users.');
         }
         setTimeout(read, 1000);
     }).fail(function() {
