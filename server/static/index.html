@@ -23,6 +23,7 @@
         <meta charset="utf-8"/>
         <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
         <script src="jquery.js"></script>
+        <script src="jscolor.js"></script>
         <link href="style.css" rel="stylesheet">
     </head>
     <body>
@@ -32,7 +33,8 @@
         <br />
         <div id="zoomout" class="btn">-</div>
         <div id="zoomin" class="btn">+</div>
-        <input id="brush" type="color" value="#ff0000" style="width:125px">
+        <input name="brush" id="brush" type="hidden" value="#ff0000">
+        <button class="jscolor {valueElement: 'brush'}" style="width:125px">Pick a color</button>
         <br />
         <font color="white">Click on any square to change its color. You can also click on the color chooser to choose a color.</font>
         <br>

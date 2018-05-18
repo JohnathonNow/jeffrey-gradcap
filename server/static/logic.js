@@ -60,7 +60,7 @@ $(function() {
     }
 
     $('li').on('click', function(e) {
-        var color = $('#brush').val();
+        var color = '#' + $('#brush').val();
         var id = $(this).attr('id').split('_')[1];
 
         $.get("write", {'id': id, 'color': color});
