@@ -32,7 +32,8 @@ options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 1
 options.parallel = 1
-options.hardware_mapping = 'regular'  # If you have an Adafruit HAT: 'adafruit-hat'
+options.hardware_mapping = 'regular'
+options.gpio_slowdown = 1
 
 matrix = RGBMatrix(options = options)
 
